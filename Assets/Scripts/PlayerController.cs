@@ -8,7 +8,9 @@ public class PlayerController : MonoBehaviour
 
     public float speed;
     public float speedIncreaseRate;
+    public GameObject pausePanel;
     float speedMod;
+    bool paused;
 
     void Start()
     {
@@ -27,9 +29,34 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void togglePause()
+    {
+        paused = !paused;
+
+        if (paused)
+        {
+            if (pausePanel != null)
+            {
+                pausePanel.SetActive(true);
+            }
+        }
+        else
+        {
+            if (pausePanel != null)
+            {
+                pausePanel.SetActive(false);
+            }
+        }
+    }
+
+
     void Update()
     {
-         if (Input.GetAxis("Jump") > 0) //spacebar is being pressed
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            togglePause();
+        }
+        if (Input.GetAxis("Jump") > 0 || paused) //spacebar is being pressed
         {
             Debug.Log("Spacebar being pressed");
             rigidbody2d.velocity = new Vector2(0.0f, 0.0f);

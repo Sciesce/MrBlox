@@ -585,7 +585,7 @@ GameObject:
   - component: {fileID: 1130710797}
   m_Layer: 0
   m_Name: Door
-  m_TagString: Untagged
+  m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1689,6 +1689,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody2d: {fileID: 1766712404}
   speed: 5
+  speedIncreaseRate: 0.01
 --- !u!1 &1806415509
 GameObject:
   m_ObjectHideFlags: 0
