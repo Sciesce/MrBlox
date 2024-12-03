@@ -56,38 +56,47 @@ public class PlayerController : MonoBehaviour
         {
             togglePause();
         }
-        if (Input.GetAxis("Jump") > 0 || paused) //spacebar is being pressed
+        if (paused)
         {
-            Debug.Log("Spacebar being pressed");
+
             rigidbody2d.velocity = new Vector2(0.0f, 0.0f);
+            return;
         }
         else
         {
-            if (Input.GetAxis("Horizontal") > 0) // input is positive moving right
+            if (Input.GetAxis("Jump") > 0) //spacebar is being pressed
             {
-                modspeed();
-                rigidbody2d.velocity = new Vector2(speed * speedMod, 0f);
+                Debug.Log("Spacebar being pressed");
+                rigidbody2d.velocity = new Vector2(0.0f, 0.0f);
             }
-            else if (Input.GetAxis("Horizontal") < 0) // input is nevative
+            else
             {
-                modspeed();
-                rigidbody2d.velocity = new Vector2(-speed * speedMod, 0f);
-            }
+                if (Input.GetAxis("Horizontal") > 0) // input is positive moving right
+                {
+                    modspeed();
+                    rigidbody2d.velocity = new Vector2(speed * speedMod, 0f);
+                }
+                else if (Input.GetAxis("Horizontal") < 0) // input is nevative
+                {
+                    modspeed();
+                    rigidbody2d.velocity = new Vector2(-speed * speedMod, 0f);
+                }
 
-            if (Input.GetAxis("Vertical") > 0) //input is pos
-            {
-                modspeed();
-                rigidbody2d.velocity = new Vector2(0f, speed * speedMod);
-            }
-            else if (Input.GetAxis("Vertical") < 0) //input is pos
-            {
-                modspeed();
-                rigidbody2d.velocity = new Vector2(0f, -speed * speedMod);
-            }
-            else if (Input.GetAxis("Vertical") == 0 && Input.GetAxis("Horizontal") == 0) //axis is zero
-            {
-                rigidbody2d.velocity = new Vector2(0f, 0f);
-                speedMod = 0.0f;
+                if (Input.GetAxis("Vertical") > 0) //input is pos
+                {
+                    modspeed();
+                    rigidbody2d.velocity = new Vector2(0f, speed * speedMod);
+                }
+                else if (Input.GetAxis("Vertical") < 0) //input is pos
+                {
+                    modspeed();
+                    rigidbody2d.velocity = new Vector2(0f, -speed * speedMod);
+                }
+                else if (Input.GetAxis("Vertical") == 0 && Input.GetAxis("Horizontal") == 0) //axis is zero
+                {
+                    rigidbody2d.velocity = new Vector2(0f, 0f);
+                    speedMod = 0.0f;
+                }
             }
         }
     }
