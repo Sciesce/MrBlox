@@ -56,47 +56,53 @@ public class PlayerController : MonoBehaviour
         {
             togglePause();
         }
+
         if (paused)
         {
 
-            rigidbody2d.velocity = new Vector2(0.0f, 0.0f);
+            rigidbody2d.velocity = Vector2.zero;
             return;
+        }
+
+        Vector2 moveDirection = Vector2.zero;
+       
+        if (Input.GetKey(KeyCode.Space)) //spacebar is being pressed
+        {
+            Debug.Log("Spacebar being pressed");
+            rigidbody2d.velocity = Vector2.zero;
         }
         else
         {
-            if (Input.GetAxis("Jump") > 0) //spacebar is being pressed
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow)) // input is positive moving right
             {
-                Debug.Log("Spacebar being pressed");
-                rigidbody2d.velocity = new Vector2(0.0f, 0.0f);
+                modspeed();
+                moveDirection.x = speed * speedMod;
+            }
+            else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.RightArrow)) // input is nevative
+            {
+                modspeed();
+                moveDirection.x = -speed * speedMod;
+            }
+
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) //input is pos
+            {
+                modspeed();
+                moveDirection.y = speed * speedMod;
+            }
+            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) //input is pos
+            {
+                modspeed();
+                moveDirection.y = -speed * speedMod;
+            }
+
+            if (moveDirection == Vector2.zero)
+            {
+                rigidbody2d.velocity = Vector2.zero;
+                speedMod = 0.0f;
             }
             else
             {
-                if (Input.GetAxis("Horizontal") > 0) // input is positive moving right
-                {
-                    modspeed();
-                    rigidbody2d.velocity = new Vector2(speed * speedMod, 0f);
-                }
-                else if (Input.GetAxis("Horizontal") < 0) // input is nevative
-                {
-                    modspeed();
-                    rigidbody2d.velocity = new Vector2(-speed * speedMod, 0f);
-                }
-
-                if (Input.GetAxis("Vertical") > 0) //input is pos
-                {
-                    modspeed();
-                    rigidbody2d.velocity = new Vector2(0f, speed * speedMod);
-                }
-                else if (Input.GetAxis("Vertical") < 0) //input is pos
-                {
-                    modspeed();
-                    rigidbody2d.velocity = new Vector2(0f, -speed * speedMod);
-                }
-                else if (Input.GetAxis("Vertical") == 0 && Input.GetAxis("Horizontal") == 0) //axis is zero
-                {
-                    rigidbody2d.velocity = new Vector2(0f, 0f);
-                    speedMod = 0.0f;
-                }
+                rigidbody2d.velocity = moveDirection;
             }
         }
     }
