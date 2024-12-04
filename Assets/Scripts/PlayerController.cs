@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,8 +11,11 @@ public class PlayerController : MonoBehaviour
     public float speedIncreaseRate;
     public GameObject pausePanel;
     public GameObject winPanel;
+    public GameObject losePanel;
     float speedMod;
     bool paused;
+    bool gameOver = false;
+
 
     void Start()
     {
@@ -45,12 +49,7 @@ public class PlayerController : MonoBehaviour
         {
             if (pausePanel != null)
             {
-                pausePanel.SetActive(false);
-
-                if (winPanel != null)
-                {
-                    winPanel.SetActive(false);
-                }
+                pausePanel.SetActive(false);            
             }
         }
     }
@@ -60,10 +59,13 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            togglePause();
+            if (gameOver == false)
+            {
+                togglePause();
+            }
         }
 
-        if (paused)
+        if (paused || gameOver)
         {
 
             rigidbody2d.velocity = Vector2.zero;
@@ -79,12 +81,12 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow)) // input is positive moving right
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) // input is positive moving right
             {
                 modspeed();
                 moveDirection.x = speed * speedMod;
             }
-            else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.RightArrow)) // input is nevative
+            else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) // input is nevative
             {
                 modspeed();
                 moveDirection.x = -speed * speedMod;
@@ -119,12 +121,18 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Level Complete");
             winPanel.SetActive(true);
-            paused = true;
+            gameOver = true;
         }
-        else
+        else if (other.tag == "Enemy")
         {
             Debug.Log("Not a Winner :D");
+            losePanel.SetActive(true);
+            gameOver = true;
         }
+    }
 
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
