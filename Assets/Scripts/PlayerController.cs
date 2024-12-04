@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public float speed;
     public float speedIncreaseRate;
     public GameObject pausePanel;
+    public GameObject winPanel;
     float speedMod;
     bool paused;
 
@@ -45,6 +46,11 @@ public class PlayerController : MonoBehaviour
             if (pausePanel != null)
             {
                 pausePanel.SetActive(false);
+
+                if (winPanel != null)
+                {
+                    winPanel.SetActive(false);
+                }
             }
         }
     }
@@ -112,6 +118,8 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "Door")
         {
             Debug.Log("Level Complete");
+            winPanel.SetActive(true);
+            paused = true;
         }
         else
         {
