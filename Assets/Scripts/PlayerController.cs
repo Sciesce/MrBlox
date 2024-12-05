@@ -12,9 +12,9 @@ public class PlayerController : MonoBehaviour
     public GameObject pausePanel;
     public GameObject winPanel;
     public GameObject losePanel;
-    float speedMod;
+    float speedMod; //mod incremented to provide build up to max speed
     bool paused;
-    bool gameOver = false;
+    bool gameOver = false; //used to prevent movement during game won/loss screens
 
 
     void Start()
@@ -117,13 +117,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Door")
+        if (other.tag == "Door") //if player overlaps winning door
         {
             Debug.Log("Level Complete");
             winPanel.SetActive(true);
             gameOver = true;
         }
-        else if (other.tag == "Enemy")
+        else if (other.tag == "Enemy") //if player overlaps enemy
         {
             Debug.Log("Not a Winner :D");
             losePanel.SetActive(true);
