@@ -119,20 +119,25 @@ public class PlayerController : MonoBehaviour
     {
         if (other.tag == "Door") //if player overlaps winning door
         {
-            Debug.Log("Level Complete");
-            winPanel.SetActive(true);
-            gameOver = true;
+            if (gameOver) //preventing unintentional double scenario trigger
+            {
+                return;
+            }
+
+            Debug.Log("Level Complete"); //debug
+            winPanel.SetActive(true); //setting win panel to visible
+            gameOver = true; //preventing extra trips of screen load
         }
         else if (other.tag == "Enemy") //if player overlaps enemy
         {
-            Debug.Log("Not a Winner :D");
-            losePanel.SetActive(true);
-            gameOver = true;
-        }
-    }
+            if (gameOver) //preventing unintentional enemy trigger after win
+            {
+                return;
+            }
 
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            Debug.Log("Not a Winner :D"); //debug
+            losePanel.SetActive(true); //lose panel
+            gameOver = true; //stopping player movement/preventing re-trip of screens
+        }
     }
 }
