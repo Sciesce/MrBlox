@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     bool paused;
     bool gameOver = false; //used to prevent movement during game won/loss screens
 
+    public CameraShake cameraShake;
+
 
     void Start()
     {
@@ -138,6 +140,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Not a Winner :D"); //debug
             losePanel.SetActive(true); //lose panel
             gameOver = true; //stopping player movement/preventing re-trip of screens
+            StartCoroutine(cameraShake.Shake(.15f, .05f)); // camera shake
         }
     }
 }
