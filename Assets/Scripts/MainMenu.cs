@@ -22,4 +22,8 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    public void OpenSelectedLevel(int index)
+    {
+        SceneManager.LoadScene(index);
+    }
 }
