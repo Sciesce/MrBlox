@@ -39,13 +39,13 @@ public class Patrol : MonoBehaviour
     void Update()
     {
         elapsedTime += Time.deltaTime;
-        float t = Mathf.Clamp01(elapsedTime / lerpDuration); // Normalize time (0 to 1)
+        float moveTime = Mathf.Clamp01(elapsedTime / lerpDuration); // Normalize time (0 to 1)
 
         // Move the object between pointA and pointB using Lerp
-        transform.position = Vector2.Lerp(pointA, pointB, t);
+        transform.position = Vector2.Lerp(pointA, pointB, moveTime);
 
         // If the lerp is complete (t >= 1), toggle direction
-        if (t >= 1f)
+        if (moveTime >= 1f)
         {
             // Reset elapsed time for the next lerp cycle
             elapsedTime = 0f;
