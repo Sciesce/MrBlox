@@ -6,25 +6,28 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public Rigidbody2D rigidbody2d;
-
-    public float speed;
-    public float speedIncreaseRate;
+    public float speed; //character movement speed
+    public float speedIncreaseRate; //incremented speed 
     public GameObject pausePanel;
     public GameObject winPanel;
     public GameObject losePanel;
+    public CameraShake cameraShake;
+    public float rotationSpeed = 15f;
+
+    private Quaternion targetRotation;
+
     float speedMod; //mod incremented to provide build up to max speed
     bool paused;
     bool gameOver = false; //used to prevent movement during game won/loss screens
 
-    public CameraShake cameraShake;
 
 
     void Start()
     {
-        
+        targetRotation = transform.rotation;  //initializing values
     }
 
-    void modspeed()
+    void modspeed() //used to raise the speed gradually to full, simulating drag.
     {
         if (speedMod <= 1)
         {
@@ -36,22 +39,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void togglePause()
+    void togglePause() //pausing utilizing timescale
     {
-        paused = !paused;
+        paused = !paused; //flopping
 
         if (paused)
         {
             if (pausePanel != null)
             {
                 pausePanel.SetActive(true);
+                Time.timeScale = 0;
             }
         }
         else
         {
             if (pausePanel != null)
             {
-                pausePanel.SetActive(false);            
+                pausePanel.SetActive(false);
+                Time.timeScale = 1;
             }
         }
     }
@@ -59,19 +64,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape)) //attempting to pause
         {
             if (gameOver == false)
             {
                 togglePause();
             }
-        }
-
-        if (paused || gameOver)
-        {
-
-            rigidbody2d.velocity = Vector2.zero;
-            return;
         }
 
         Vector2 moveDirection = Vector2.zero;
@@ -113,8 +111,17 @@ public class PlayerController : MonoBehaviour
             else
             {
                 rigidbody2d.velocity = moveDirection;
+
+                //calculating the rotation
+                if (moveDirection.sqrMagnitude > 0.01f)
+                {
+                    float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg; //angle in degrees
+                    targetRotation = Quaternion.Euler(0, 0, angle); //setting the rotation on Z axis
+                }
             }
         }
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -129,6 +136,8 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Level Complete"); //debug
             winPanel.SetActive(true); //setting win panel to visible
             gameOver = true; //preventing extra trips of screen load
+            Time.timeScale = 0;
+
         }
         else if (other.tag == "Enemy") //if player overlaps enemy
         {
@@ -141,6 +150,7 @@ public class PlayerController : MonoBehaviour
             losePanel.SetActive(true); //lose panel
             gameOver = true; //stopping player movement/preventing re-trip of screens
             StartCoroutine(cameraShake.Shake(.15f, .05f)); // camera shake
+            Time.timeScale = 0;
         }
     }
 }
