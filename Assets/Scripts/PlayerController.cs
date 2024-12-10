@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape)) //attempting to pause
         {
-            if (gameOver == false)
+            if (gameOver == false) //only if not win or lose game condition is met
             {
                 togglePause();
             }
@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
                 moveDirection.y = -speed * speedMod;
             }
 
-            if (moveDirection == Vector2.zero)
+            if (moveDirection == Vector2.zero) //if player has stopp
             {
                 rigidbody2d.velocity = Vector2.zero;
                 speedMod = 0.0f;
